@@ -1,0 +1,204 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 500px;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 500px;
+            height: 500px;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "Aemon", "label": "Aemon", "shape": "dot", "size": 10}, {"id": "Grenn", "label": "Grenn", "shape": "dot", "size": 10}, {"id": "Samwell", "label": "Samwell", "shape": "dot", "size": 10}, {"id": "Jon", "label": "Jon", "shape": "dot", "size": 10}, {"id": "Robert", "label": "Robert", "shape": "dot", "size": 10}, {"id": "Stannis", "label": "Stannis", "shape": "dot", "size": 10}, {"id": "Eddison", "label": "Eddison", "shape": "dot", "size": 10}, {"id": "Bran", "label": "Bran", "shape": "dot", "size": 10}, {"id": "Jojen", "label": "Jojen", "shape": "dot", "size": 10}, {"id": "Meera", "label": "Meera", "shape": "dot", "size": 10}, {"id": "Melisandre", "label": "Melisandre", "shape": "dot", "size": 10}, {"id": "Bowen", "label": "Bowen", "shape": "dot", "size": 10}, {"id": "Craster", "label": "Craster", "shape": "dot", "size": 10}, {"id": "Gilly", "label": "Gilly", "shape": "dot", "size": 10}, {"id": "Janos", "label": "Janos", "shape": "dot", "size": 10}, {"id": "Mance", "label": "Mance", "shape": "dot", "size": 10}, {"id": "Qhorin", "label": "Qhorin", "shape": "dot", "size": 10}, {"id": "Aerys", "label": "Aerys", "shape": "dot", "size": 10}, {"id": "Jaime", "label": "Jaime", "shape": "dot", "size": 10}, {"id": "Tyrion", "label": "Tyrion", "shape": "dot", "size": 10}, {"id": "Tywin", "label": "Tywin", "shape": "dot", "size": 10}, {"id": "Arya", "label": "Arya", "shape": "dot", "size": 10}, {"id": "Catelyn", "label": "Catelyn", "shape": "dot", "size": 10}, {"id": "Cersei", "label": "Cersei", "shape": "dot", "size": 10}, {"id": "Eddard", "label": "Eddard", "shape": "dot", "size": 10}, {"id": "Balon", "label": "Balon", "shape": "dot", "size": 10}, {"id": "Barristan", "label": "Barristan", "shape": "dot", "size": 10}, {"id": "Brienne", "label": "Brienne", "shape": "dot", "size": 10}, {"id": "Edmure", "label": "Edmure", "shape": "dot", "size": 10}, {"id": "Elia", "label": "Elia", "shape": "dot", "size": 10}, {"id": "Gregor", "label": "Gregor", "shape": "dot", "size": 10}, {"id": "Joffrey", "label": "Joffrey", "shape": "dot", "size": 10}, {"id": "Loras", "label": "Loras", "shape": "dot", "size": 10}, {"id": "Meryn", "label": "Meryn", "shape": "dot", "size": 10}, {"id": "Qyburn", "label": "Qyburn", "shape": "dot", "size": 10}, {"id": "Renly", "label": "Renly", "shape": "dot", "size": 10}, {"id": "Tommen", "label": "Tommen", "shape": "dot", "size": 10}, {"id": "Robb", "label": "Robb", "shape": "dot", "size": 10}, {"id": "Sansa", "label": "Sansa", "shape": "dot", "size": 10}, {"id": "Walton", "label": "Walton", "shape": "dot", "size": 10}, {"id": "Daenerys", "label": "Daenerys", "shape": "dot", "size": 10}, {"id": "Jon Arryn", "label": "Jon Arryn", "shape": "dot", "size": 10}, {"id": "Rhaegar", "label": "Rhaegar", "shape": "dot", "size": 10}, {"id": "Thoros", "label": "Thoros", "shape": "dot", "size": 10}, {"id": "Sandor", "label": "Sandor", "shape": "dot", "size": 10}, {"id": "Lysa", "label": "Lysa", "shape": "dot", "size": 10}, {"id": "Myrcella", "label": "Myrcella", "shape": "dot", "size": 10}, {"id": "Bronn", "label": "Bronn", "shape": "dot", "size": 10}, {"id": "Chataya", "label": "Chataya", "shape": "dot", "size": 10}, {"id": "Doran", "label": "Doran", "shape": "dot", "size": 10}, {"id": "Ellaria", "label": "Ellaria", "shape": "dot", "size": 10}, {"id": "Ilyn", "label": "Ilyn", "shape": "dot", "size": 10}, {"id": "Kevan", "label": "Kevan", "shape": "dot", "size": 10}, {"id": "Mace", "label": "Mace", "shape": "dot", "size": 10}, {"id": "Margaery", "label": "Margaery", "shape": "dot", "size": 10}, {"id": "Oberyn", "label": "Oberyn", "shape": "dot", "size": 10}, {"id": "Petyr", "label": "Petyr", "shape": "dot", "size": 10}, {"id": "Podrick", "label": "Podrick", "shape": "dot", "size": 10}, {"id": "Pycelle", "label": "Pycelle", "shape": "dot", "size": 10}, {"id": "Shae", "label": "Shae", "shape": "dot", "size": 10}, {"id": "Varys", "label": "Varys", "shape": "dot", "size": 10}, {"id": "Viserys", "label": "Viserys", "shape": "dot", "size": 10}, {"id": "Brynden", "label": "Brynden", "shape": "dot", "size": 10}, {"id": "Val", "label": "Val", "shape": "dot", "size": 10}, {"id": "Walder", "label": "Walder", "shape": "dot", "size": 10}, {"id": "Alliser", "label": "Alliser", "shape": "dot", "size": 10}, {"id": "Dalla", "label": "Dalla", "shape": "dot", "size": 10}, {"id": "Rattleshirt", "label": "Rattleshirt", "shape": "dot", "size": 10}, {"id": "Styr", "label": "Styr", "shape": "dot", "size": 10}, {"id": "Ygritte", "label": "Ygritte", "shape": "dot", "size": 10}, {"id": "Amory", "label": "Amory", "shape": "dot", "size": 10}, {"id": "Anguy", "label": "Anguy", "shape": "dot", "size": 10}, {"id": "Beric", "label": "Beric", "shape": "dot", "size": 10}, {"id": "Gendry", "label": "Gendry", "shape": "dot", "size": 10}, {"id": "Rickon", "label": "Rickon", "shape": "dot", "size": 10}, {"id": "Roose", "label": "Roose", "shape": "dot", "size": 10}, {"id": "Hodor", "label": "Hodor", "shape": "dot", "size": 10}, {"id": "Luwin", "label": "Luwin", "shape": "dot", "size": 10}, {"id": "Nan", "label": "Nan", "shape": "dot", "size": 10}, {"id": "Theon", "label": "Theon", "shape": "dot", "size": 10}, {"id": "Lothar", "label": "Lothar", "shape": "dot", "size": 10}, {"id": "Rickard", "label": "Rickard", "shape": "dot", "size": 10}, {"id": "Orell", "label": "Orell", "shape": "dot", "size": 10}, {"id": "Olenna", "label": "Olenna", "shape": "dot", "size": 10}, {"id": "Belwas", "label": "Belwas", "shape": "dot", "size": 10}, {"id": "Illyrio", "label": "Illyrio", "shape": "dot", "size": 10}, {"id": "Jorah", "label": "Jorah", "shape": "dot", "size": 10}, {"id": "Roslin", "label": "Roslin", "shape": "dot", "size": 10}, {"id": "Hoster", "label": "Hoster", "shape": "dot", "size": 10}, {"id": "Jeyne", "label": "Jeyne", "shape": "dot", "size": 10}, {"id": "Marillion", "label": "Marillion", "shape": "dot", "size": 10}, {"id": "Robert Arryn", "label": "Robert Arryn", "shape": "dot", "size": 10}, {"id": "Ramsay", "label": "Ramsay", "shape": "dot", "size": 10}, {"id": "Davos", "label": "Davos", "shape": "dot", "size": 10}, {"id": "Karl", "label": "Karl", "shape": "dot", "size": 10}, {"id": "Daario", "label": "Daario", "shape": "dot", "size": 10}, {"id": "Drogo", "label": "Drogo", "shape": "dot", "size": 10}, {"id": "Irri", "label": "Irri", "shape": "dot", "size": 10}, {"id": "Missandei", "label": "Missandei", "shape": "dot", "size": 10}, {"id": "Aegon", "label": "Aegon", "shape": "dot", "size": 10}, {"id": "Kraznys", "label": "Kraznys", "shape": "dot", "size": 10}, {"id": "Rakharo", "label": "Rakharo", "shape": "dot", "size": 10}, {"id": "Worm", "label": "Worm", "shape": "dot", "size": 10}, {"id": "Cressen", "label": "Cressen", "shape": "dot", "size": 10}, {"id": "Salladhor", "label": "Salladhor", "shape": "dot", "size": 10}, {"id": "Shireen", "label": "Shireen", "shape": "dot", "size": 10}, {"id": "Lancel", "label": "Lancel", "shape": "dot", "size": 10}]);
+        edges = new vis.DataSet([{"from": "Aemon", "label": 1, "to": "Grenn", "weight": 1}, {"from": "Aemon", "label": 1, "to": "Samwell", "weight": 1}, {"from": "Aemon", "label": 1, "to": "Jon", "weight": 1}, {"from": "Aemon", "label": 1, "to": "Robert", "weight": 1}, {"from": "Aemon", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Grenn", "label": 1, "to": "Eddison", "weight": 1}, {"from": "Grenn", "label": 1, "to": "Jon", "weight": 1}, {"from": "Grenn", "label": 1, "to": "Samwell", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Bran", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Jojen", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Jon", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Meera", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Melisandre", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Bowen", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Craster", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Eddison", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Gilly", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Janos", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Mance", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Qhorin", "weight": 1}, {"from": "Samwell", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Aerys", "label": 1, "to": "Jaime", "weight": 1}, {"from": "Aerys", "label": 1, "to": "Robert", "weight": 1}, {"from": "Aerys", "label": 1, "to": "Tyrion", "weight": 1}, {"from": "Aerys", "label": 1, "to": "Tywin", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Arya", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Catelyn", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Cersei", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Balon", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Barristan", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Brienne", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Edmure", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Elia", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Gregor", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Joffrey", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Loras", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Meryn", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Qyburn", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Renly", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Robert", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Tommen", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Tyrion", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Robb", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Tywin", "weight": 1}, {"from": "Jaime", "label": 1, "to": "Walton", "weight": 1}, {"from": "Robert", "label": 1, "to": "Arya", "weight": 1}, {"from": "Robert", "label": 1, "to": "Cersei", "weight": 1}, {"from": "Robert", "label": 1, "to": "Daenerys", "weight": 1}, {"from": "Robert", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Robert", "label": 1, "to": "Jon", "weight": 1}, {"from": "Robert", "label": 1, "to": "Jon Arryn", "weight": 1}, {"from": "Robert", "label": 1, "to": "Rhaegar", "weight": 1}, {"from": "Robert", "label": 1, "to": "Barristan", "weight": 1}, {"from": "Robert", "label": 1, "to": "Renly", "weight": 1}, {"from": "Robert", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Robert", "label": 1, "to": "Thoros", "weight": 1}, {"from": "Robert", "label": 1, "to": "Sandor", "weight": 1}, {"from": "Robert", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Robert", "label": 1, "to": "Tyrion", "weight": 1}, {"from": "Robert", "label": 1, "to": "Tywin", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Arya", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Catelyn", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Cersei", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Joffrey", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Lysa", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Myrcella", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Robb", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Balon", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Bronn", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Chataya", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Doran", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Elia", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Ellaria", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Gregor", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Ilyn", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Janos", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Kevan", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Loras", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Mace", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Margaery", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Meryn", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Oberyn", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Petyr", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Podrick", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Pycelle", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Renly", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Sandor", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Shae", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Varys", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Tywin", "weight": 1}, {"from": "Tyrion", "label": 1, "to": "Viserys", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Lysa", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Robb", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Balon", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Brynden", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Cersei", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Gregor", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Joffrey", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Kevan", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Mace", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Oberyn", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Petyr", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Podrick", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Pycelle", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Tommen", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Val", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Varys", "weight": 1}, {"from": "Tywin", "label": 1, "to": "Walder", "weight": 1}, {"from": "Alliser", "label": 1, "to": "Mance", "weight": 1}, {"from": "Alliser", "label": 1, "to": "Janos", "weight": 1}, {"from": "Alliser", "label": 1, "to": "Jon", "weight": 1}, {"from": "Mance", "label": 1, "to": "Janos", "weight": 1}, {"from": "Mance", "label": 1, "to": "Jon", "weight": 1}, {"from": "Mance", "label": 1, "to": "Craster", "weight": 1}, {"from": "Mance", "label": 1, "to": "Dalla", "weight": 1}, {"from": "Mance", "label": 1, "to": "Gilly", "weight": 1}, {"from": "Mance", "label": 1, "to": "Qhorin", "weight": 1}, {"from": "Mance", "label": 1, "to": "Rattleshirt", "weight": 1}, {"from": "Mance", "label": 1, "to": "Styr", "weight": 1}, {"from": "Mance", "label": 1, "to": "Val", "weight": 1}, {"from": "Mance", "label": 1, "to": "Ygritte", "weight": 1}, {"from": "Amory", "label": 1, "to": "Oberyn", "weight": 1}, {"from": "Oberyn", "label": 1, "to": "Gregor", "weight": 1}, {"from": "Oberyn", "label": 1, "to": "Joffrey", "weight": 1}, {"from": "Oberyn", "label": 1, "to": "Ellaria", "weight": 1}, {"from": "Oberyn", "label": 1, "to": "Mace", "weight": 1}, {"from": "Arya", "label": 1, "to": "Anguy", "weight": 1}, {"from": "Arya", "label": 1, "to": "Beric", "weight": 1}, {"from": "Arya", "label": 1, "to": "Bran", "weight": 1}, {"from": "Arya", "label": 1, "to": "Brynden", "weight": 1}, {"from": "Arya", "label": 1, "to": "Cersei", "weight": 1}, {"from": "Arya", "label": 1, "to": "Gendry", "weight": 1}, {"from": "Arya", "label": 1, "to": "Gregor", "weight": 1}, {"from": "Arya", "label": 1, "to": "Joffrey", "weight": 1}, {"from": "Arya", "label": 1, "to": "Jon", "weight": 1}, {"from": "Arya", "label": 1, "to": "Rickon", "weight": 1}, {"from": "Arya", "label": 1, "to": "Roose", "weight": 1}, {"from": "Arya", "label": 1, "to": "Sandor", "weight": 1}, {"from": "Arya", "label": 1, "to": "Thoros", "weight": 1}, {"from": "Arya", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Arya", "label": 1, "to": "Robb", "weight": 1}, {"from": "Arya", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Anguy", "label": 1, "to": "Beric", "weight": 1}, {"from": "Beric", "label": 1, "to": "Gendry", "weight": 1}, {"from": "Beric", "label": 1, "to": "Thoros", "weight": 1}, {"from": "Beric", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Beric", "label": 1, "to": "Sandor", "weight": 1}, {"from": "Bran", "label": 1, "to": "Hodor", "weight": 1}, {"from": "Bran", "label": 1, "to": "Jojen", "weight": 1}, {"from": "Bran", "label": 1, "to": "Jon", "weight": 1}, {"from": "Bran", "label": 1, "to": "Luwin", "weight": 1}, {"from": "Bran", "label": 1, "to": "Meera", "weight": 1}, {"from": "Bran", "label": 1, "to": "Nan", "weight": 1}, {"from": "Bran", "label": 1, "to": "Rickon", "weight": 1}, {"from": "Bran", "label": 1, "to": "Theon", "weight": 1}, {"from": "Bran", "label": 1, "to": "Catelyn", "weight": 1}, {"from": "Bran", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Bran", "label": 1, "to": "Robb", "weight": 1}, {"from": "Bran", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Brynden", "label": 1, "to": "Brynden", "weight": 1}, {"from": "Brynden", "label": 1, "to": "Lothar", "weight": 1}, {"from": "Brynden", "label": 1, "to": "Walder", "weight": 1}, {"from": "Brynden", "label": 1, "to": "Catelyn", "weight": 1}, {"from": "Brynden", "label": 1, "to": "Edmure", "weight": 1}, {"from": "Brynden", "label": 1, "to": "Rickard", "weight": 1}, {"from": "Brynden", "label": 1, "to": "Robb", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Catelyn", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Brienne", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Bronn", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Elia", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Gregor", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Ilyn", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Joffrey", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Meryn", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Pycelle", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Sandor", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Shae", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Varys", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Lysa", "weight": 1}, {"from": "Cersei", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Gendry", "label": 1, "to": "Thoros", "weight": 1}, {"from": "Gendry", "label": 1, "to": "Sandor", "weight": 1}, {"from": "Gregor", "label": 1, "to": "Bronn", "weight": 1}, {"from": "Gregor", "label": 1, "to": "Elia", "weight": 1}, {"from": "Gregor", "label": 1, "to": "Ilyn", "weight": 1}, {"from": "Gregor", "label": 1, "to": "Meryn", "weight": 1}, {"from": "Gregor", "label": 1, "to": "Sandor", "weight": 1}, {"from": "Gregor", "label": 1, "to": "Joffrey", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Ilyn", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Kevan", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Loras", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Margaery", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Meryn", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Myrcella", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Sandor", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Tommen", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Robb", "weight": 1}, {"from": "Joffrey", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Jon", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Jon", "label": 1, "to": "Craster", "weight": 1}, {"from": "Jon", "label": 1, "to": "Dalla", "weight": 1}, {"from": "Jon", "label": 1, "to": "Eddison", "weight": 1}, {"from": "Jon", "label": 1, "to": "Gilly", "weight": 1}, {"from": "Jon", "label": 1, "to": "Janos", "weight": 1}, {"from": "Jon", "label": 1, "to": "Meera", "weight": 1}, {"from": "Jon", "label": 1, "to": "Melisandre", "weight": 1}, {"from": "Jon", "label": 1, "to": "Orell", "weight": 1}, {"from": "Jon", "label": 1, "to": "Qhorin", "weight": 1}, {"from": "Jon", "label": 1, "to": "Rattleshirt", "weight": 1}, {"from": "Jon", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Jon", "label": 1, "to": "Styr", "weight": 1}, {"from": "Jon", "label": 1, "to": "Theon", "weight": 1}, {"from": "Jon", "label": 1, "to": "Val", "weight": 1}, {"from": "Jon", "label": 1, "to": "Ygritte", "weight": 1}, {"from": "Jon", "label": 1, "to": "Robb", "weight": 1}, {"from": "Jon", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Rickon", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Rickon", "label": 1, "to": "Theon", "weight": 1}, {"from": "Rickon", "label": 1, "to": "Robb", "weight": 1}, {"from": "Rickon", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Roose", "label": 1, "to": "Catelyn", "weight": 1}, {"from": "Roose", "label": 1, "to": "Robb", "weight": 1}, {"from": "Roose", "label": 1, "to": "Brienne", "weight": 1}, {"from": "Sandor", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Sandor", "label": 1, "to": "Ilyn", "weight": 1}, {"from": "Sandor", "label": 1, "to": "Meryn", "weight": 1}, {"from": "Sandor", "label": 1, "to": "Thoros", "weight": 1}, {"from": "Sandor", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Balon", "label": 1, "to": "Loras", "weight": 1}, {"from": "Balon", "label": 1, "to": "Robb", "weight": 1}, {"from": "Balon", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Loras", "label": 1, "to": "Brienne", "weight": 1}, {"from": "Loras", "label": 1, "to": "Margaery", "weight": 1}, {"from": "Loras", "label": 1, "to": "Olenna", "weight": 1}, {"from": "Loras", "label": 1, "to": "Renly", "weight": 1}, {"from": "Loras", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Belwas", "label": 1, "to": "Barristan", "weight": 1}, {"from": "Belwas", "label": 1, "to": "Illyrio", "weight": 1}, {"from": "Belwas", "label": 1, "to": "Daenerys", "weight": 1}, {"from": "Belwas", "label": 1, "to": "Jorah", "weight": 1}, {"from": "Barristan", "label": 1, "to": "Daenerys", "weight": 1}, {"from": "Barristan", "label": 1, "to": "Jorah", "weight": 1}, {"from": "Barristan", "label": 1, "to": "Rhaegar", "weight": 1}, {"from": "Hodor", "label": 1, "to": "Jojen", "weight": 1}, {"from": "Hodor", "label": 1, "to": "Meera", "weight": 1}, {"from": "Hodor", "label": 1, "to": "Robb", "weight": 1}, {"from": "Jojen", "label": 1, "to": "Meera", "weight": 1}, {"from": "Luwin", "label": 1, "to": "Nan", "weight": 1}, {"from": "Theon", "label": 1, "to": "Robb", "weight": 1}, {"from": "Brienne", "label": 1, "to": "Catelyn", "weight": 1}, {"from": "Brienne", "label": 1, "to": "Robb", "weight": 1}, {"from": "Brienne", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Bronn", "label": 1, "to": "Podrick", "weight": 1}, {"from": "Podrick", "label": 1, "to": "Margaery", "weight": 1}, {"from": "Podrick", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Lothar", "label": 1, "to": "Edmure", "weight": 1}, {"from": "Lothar", "label": 1, "to": "Roslin", "weight": 1}, {"from": "Lothar", "label": 1, "to": "Robb", "weight": 1}, {"from": "Lothar", "label": 1, "to": "Walder", "weight": 1}, {"from": "Walder", "label": 1, "to": "Catelyn", "weight": 1}, {"from": "Walder", "label": 1, "to": "Edmure", "weight": 1}, {"from": "Walder", "label": 1, "to": "Robb", "weight": 1}, {"from": "Walder", "label": 1, "to": "Petyr", "weight": 1}, {"from": "Walder", "label": 1, "to": "Roslin", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Edmure", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Hoster", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Jeyne", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Lysa", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Petyr", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Robb", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Roslin", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Catelyn", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Edmure", "label": 1, "to": "Roslin", "weight": 1}, {"from": "Edmure", "label": 1, "to": "Hoster", "weight": 1}, {"from": "Edmure", "label": 1, "to": "Robb", "weight": 1}, {"from": "Hoster", "label": 1, "to": "Lysa", "weight": 1}, {"from": "Jeyne", "label": 1, "to": "Robb", "weight": 1}, {"from": "Lysa", "label": 1, "to": "Jon Arryn", "weight": 1}, {"from": "Lysa", "label": 1, "to": "Marillion", "weight": 1}, {"from": "Lysa", "label": 1, "to": "Petyr", "weight": 1}, {"from": "Lysa", "label": 1, "to": "Robert Arryn", "weight": 1}, {"from": "Lysa", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Petyr", "label": 1, "to": "Robb", "weight": 1}, {"from": "Petyr", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Robb", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Robb", "label": 1, "to": "Ramsay", "weight": 1}, {"from": "Robb", "label": 1, "to": "Rickard", "weight": 1}, {"from": "Robb", "label": 1, "to": "Sansa", "weight": 1}, {"from": "Robb", "label": 1, "to": "Stannis", "weight": 1}, {"from": "Sansa", "label": 1, "to": "Eddard", "weight": 1}, {"from": "Sansa", "label": 1, "to": "Kevan", "weight": 1}, {"from": "Sansa", "label": 1, "to": "Margaery", "weight": 1}, {"from": "Sansa", "label": 1, "to": "Marillion", "weight": 1}, {"from": "Sansa", "label": 1, "to": "Myrcella", "weight": 1}, {"from": "Sansa", "label": 1, "to": "Olenna", "weight": 1}, {"from": "Sansa", "label": 1, "to": "Renly", "weight": 1}, {"from": "Sansa", "label": 1, "to": "Robert Arryn", "weight": 1}, {"from": "Sansa", "label": 1, "to": "Shae", "weight": 1}, {"from": "Stannis", "label": 1, "to": "Davos", "weight": 1}, {"from": "Stannis", "label": 1, "to": "Melisandre", "weight": 1}, {"from": "Stannis", "label": 1, "to": "Renly", "weight": 1}, {"from": "Elia", "label": 1, "to": "Rhaegar", "weight": 1}, {"from": "Ilyn", "label": 1, "to": "Meryn", "weight": 1}, {"from": "Pycelle", "label": 1, "to": "Varys", "weight": 1}, {"from": "Shae", "label": 1, "to": "Chataya", "weight": 1}, {"from": "Shae", "label": 1, "to": "Varys", "weight": 1}, {"from": "Varys", "label": 1, "to": "Kevan", "weight": 1}, {"from": "Varys", "label": 1, "to": "Renly", "weight": 1}, {"from": "Craster", "label": 1, "to": "Karl", "weight": 1}, {"from": "Craster", "label": 1, "to": "Gilly", "weight": 1}, {"from": "Daario", "label": 1, "to": "Drogo", "weight": 1}, {"from": "Daario", "label": 1, "to": "Irri", "weight": 1}, {"from": "Daario", "label": 1, "to": "Daenerys", "weight": 1}, {"from": "Daario", "label": 1, "to": "Jorah", "weight": 1}, {"from": "Drogo", "label": 1, "to": "Daenerys", "weight": 1}, {"from": "Drogo", "label": 1, "to": "Irri", "weight": 1}, {"from": "Drogo", "label": 1, "to": "Jorah", "weight": 1}, {"from": "Irri", "label": 1, "to": "Daenerys", "weight": 1}, {"from": "Irri", "label": 1, "to": "Missandei", "weight": 1}, {"from": "Daenerys", "label": 1, "to": "Aegon", "weight": 1}, {"from": "Daenerys", "label": 1, "to": "Jorah", "weight": 1}, {"from": "Daenerys", "label": 1, "to": "Kraznys", "weight": 1}, {"from": "Daenerys", "label": 1, "to": "Missandei", "weight": 1}, {"from": "Daenerys", "label": 1, "to": "Rakharo", "weight": 1}, {"from": "Daenerys", "label": 1, "to": "Rhaegar", "weight": 1}, {"from": "Daenerys", "label": 1, "to": "Viserys", "weight": 1}, {"from": "Daenerys", "label": 1, "to": "Worm", "weight": 1}, {"from": "Jorah", "label": 1, "to": "Rhaegar", "weight": 1}, {"from": "Rhaegar", "label": 1, "to": "Viserys", "weight": 1}, {"from": "Davos", "label": 1, "to": "Cressen", "weight": 1}, {"from": "Davos", "label": 1, "to": "Salladhor", "weight": 1}, {"from": "Davos", "label": 1, "to": "Melisandre", "weight": 1}, {"from": "Davos", "label": 1, "to": "Shireen", "weight": 1}, {"from": "Renly", "label": 1, "to": "Margaery", "weight": 1}, {"from": "Tommen", "label": 1, "to": "Myrcella", "weight": 1}, {"from": "Tommen", "label": 1, "to": "Margaery", "weight": 1}, {"from": "Janos", "label": 1, "to": "Bowen", "weight": 1}, {"from": "Kevan", "label": 1, "to": "Lancel", "weight": 1}, {"from": "Dalla", "label": 1, "to": "Val", "weight": 1}, {"from": "Qhorin", "label": 1, "to": "Rattleshirt", "weight": 1}, {"from": "Qhorin", "label": 1, "to": "Ygritte", "weight": 1}, {"from": "Rattleshirt", "label": 1, "to": "Ygritte", "weight": 1}, {"from": "Marillion", "label": 1, "to": "Robert Arryn", "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
