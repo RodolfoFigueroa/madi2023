@@ -1,5 +1,5 @@
-#C:\Users\lain\miniconda3\lib\site-packages\ipykernel_launcher.py -f C:\Users\lain\AppData\Roaming\jupyter\runtime\kernel-71236ecd-0e95-4816-806b-e501df7cbfa3.json
-# GMT Sun Aug 28 23:06:34 2022
+#C:\Users\lain\miniconda3\lib\site-packages\ipykernel_launcher.py -f C:\Users\lain\AppData\Roaming\jupyter\runtime\kernel-648ff673-6dd1-4021-ba1f-bef926523a66.json
+# GMT Thu Sep  1 06:21:05 2022
 # 
 0 1 2 3
 1 2
